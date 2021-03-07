@@ -24,14 +24,3 @@ class LunarCrushAPI:
         print(self.url)
         print(r.text)
         return r.json()
-
-    def _get_data_for_symbol(self, symbol):
-        return self._request(data="assets", key=config.LUNAR_CRUSH_API_KEY, symbol=symbol)
-
-    def get_price_for_symbol(self, symbol, timestamp=None):
-        if timestamp == None:
-            data = self._get_data_for_symbol(symbol)
-
-            return data["data"]["price"]
-        else:
-            raise Exception("Feature not developed yet.")

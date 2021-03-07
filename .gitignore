@@ -130,3 +130,4 @@ dmypy.json
 
 # Project files
 system/config/development.py
+database.sqlite
