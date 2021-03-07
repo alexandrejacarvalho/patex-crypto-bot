@@ -7,7 +7,7 @@ Discord Crypto Currency Markets Analysis Bot `PatexCryptoBot#5197`
 
 ## Installation
 
-Check your python version. It should be 3.8.\*.
+Check your python version. It should be 3.8.\*
 ```bash
 python -V
 ```
