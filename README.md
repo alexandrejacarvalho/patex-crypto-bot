@@ -26,7 +26,7 @@ pip install -r requirements.txt
 
 ## Configuration
 
-Change the variables in the configuration file to your.
+Change the variables in the configuration file.
 ```
 system/config/development.py
 ```
