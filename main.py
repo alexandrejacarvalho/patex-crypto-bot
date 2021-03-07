@@ -50,7 +50,7 @@ async def on_message(message):
     if message.author == client.user:
         return
 
-    elif message.content.startswith(f"{pc}commands"):  # Commands List Command
+    elif message.content.startswith(f"{pc}help"):  # Help Command
         message_body = ""
         for command in commands:
             message_body += f"**{pc}{command['command']}**\n" \
