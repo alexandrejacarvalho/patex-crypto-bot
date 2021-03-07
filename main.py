@@ -15,27 +15,27 @@ pc = "!"
 commands = [
         {
             "command": "hello",
-            "description": "Warup?",
+            "description": "👋 Warup?",
             "help": f"📄 {pc}hello",
         },
         {
             "command": "price",
-            "description": "ℹ️ Check the price of a coin by its symbol.",
+            "description": "➡️ Check the price of a coin by its symbol.",
             "help": f"📄 {pc}price <symbol\*> <quote_symbol={config.CURRENCY}>",
         },
         {
             "command": "coins",
-            "description": "ℹ️ Check the coins library. The coins listed here are constantly checked for fluctuations on the market that reveal a good oportunity of profit.",
+            "description": "➡️ Check the coins library. The coins listed here are constantly checked for fluctuations on the market that reveal a good oportunity of profit.",
             "help": f"📄 {pc}coins",
         },
         {
             "command": "addcoin",
-            "description": "ℹ️ Add coins to the library.",
+            "description": "️➡️ Add coins to the library.",
             "help": f"📃 {pc}addcoin <symbol\*> <quote_symbol={config.CURRENCY}>",
         },
         {
             "command": "removecoin",
-            "description": "ℹ️ Remove coins to the library.",
+            "description": "➡️ Remove coins to the library.",
             "help": f"📃 {pc}removecoin <symbol\*>",
         },
     ]
@@ -55,7 +55,7 @@ async def on_message(message):
         for command in commands:
             message_body += f"**{pc}{command['command']}**\n" \
                             f"{command['description']}\n" \
-                            f"{command['help']}\n\n"
+                            f"`{command['help']}`\n\n"
 
         await message.channel.send(message_body)
 
@@ -152,7 +152,7 @@ async def on_message(message):
             symbol = message_elements[1]
 
             if symbol == "help":
-                await message.channel.send(f"📃 {pc}{commands[4]['help']} <symbol*>")
+                await message.channel.send(commands[4]['help'])
         except IndexError:
             await message.channel.send("🥱 Sorry, no Coin ID as been specified. Type !coins for Coin ID's in the library.")
 
