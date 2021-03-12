@@ -38,6 +38,11 @@ commands = [
             "description": "➡️ Remove coins to the library.",
             "help": f"📃 {pc}removecoin <symbol\*>",
         },
+        {
+            "command": "coin",
+            "description": "➡️ Check coin information.",
+            "help": f"📃 {pc}coin <symbol\*>",
+        }
     ]
 
 @client.event
@@ -162,5 +167,30 @@ async def on_message(message):
             session.commit()
 
         await message.channel.send("✅ Coin removed from the library.")
+
+    elif message.content.startswith(f"{pc}{commands[5]['command']}"):  # Coin Info Command
+        message_elements = message.content.split()
+
+        try:
+            symbol = message_elements[1]
+
+            if symbol == "help":
+                await message.channel.send(commands[5]['help'])
+        except IndexError:
+            await message.channel.send("🥱 Sorry, I don't know that coin ID. Type !coins for Coin ID's in the library.")
+
+        cgh = CoinGeckoHelpers()
+        coin_gecko_id, coin_gecko_name = cgh.get_coin_by_symbol(symbol)
+
+        cg = CoinGeckoAPI()
+        result = cg.get_coin_by_id(id = coin_gecko_id)
+
+        if len(result) == 0:
+            await message.channel.send("😵 Sorry, could not find this Coin ID on CoinGecko. Check the channel pinned messages for Coin ID's.")
+            return
+        else:
+            message.channel.send(result) # Need to filter important information
+
+
 
 client.run(config.DISCORD_BOT_TOKEN)
