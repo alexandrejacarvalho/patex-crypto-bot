@@ -49,7 +49,7 @@ New suggestions for improvement and Pull Requests are welcome! We want to improv
 Open an issue with what you would like to change and we will happily discuss the idea :)
 
 The bot is on my personal Discord, you can join it if you want to talk to me or just to chat with the bot.
-[![Discord Banner](https://discordapp.com/api/guilds/689652038807978040/widget.png?style=banner2)](https://discord.gg/ywgH8wz9)
+[![Discord Banner](https://discordapp.com/api/guilds/689652038807978040/widget.png?style=banner2)](https://discord.gg/gXUBatbQjx)
 
 ## License
 [MIT](https://choosealicense.com/licenses/mit/)
