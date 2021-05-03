@@ -15,7 +15,7 @@ pc = "!"
 commands = [
         {
             "command": "hello",
-            "description": "👋 Warup?",
+            "description": "👋 Warup? (Under Development. The idea for this command is to have a greetings message containing news, the biggest bulls and bears of the day, list coin library prices, etc... Sugestions are accepted 😉",
             "help": f"📄 {pc}hello",
         },
         {
@@ -37,6 +37,11 @@ commands = [
             "command": "removecoin",
             "description": "➡️ Remove coins to the library.",
             "help": f"📃 {pc}removecoin <symbol\*>",
+        },
+        {
+            "command": "satoshi",
+            "description": "➡️ Check value in satoshi of a specific quantity.",
+            "help": f"📃 {pc}satoshi <quantity_in_quote\*> <quote_symbol={config.CURRENCY}>",
         },
     ]
 
@@ -132,18 +137,21 @@ async def on_message(message):
         cgh = CoinGeckoHelpers()
         coin_gecko_id, coin_gecko_name = cgh.get_coin_by_symbol(symbol)
 
-        cg = CoinGeckoAPI()
-        result = cg.get_price(ids=coin_gecko_id, vs_currencies=quote_symbol)
-        if len(result) == 0:
-            await message.channel.send("😵 Sorry, could not find this Coin ID on CoinGecko. Check the channel pinned messages for Coin ID's.")
-            return
-
         if coin_gecko_id:
+            cg = CoinGeckoAPI()
+            result = cg.get_price(ids=coin_gecko_id, vs_currencies=quote_symbol)
+            if len(result) == 0:
+                await message.channel.send("😵 Sorry, could not find this Coin ID on CoinGecko. Check the channel pinned messages for Coin ID's.")
+                return
+
             ed_coin = Coin(id_coingecko=coin_gecko_id, symbol=symbol, name=coin_gecko_name)
             session.add(ed_coin)
             session.commit()
 
-        await message.channel.semd("✅ Coin added to the library.")
+            await message.channel.semd("✅ Coin added to the library.")
+        else:
+            await message.channel.send("🥱 Sorry, the specified Coin ID doesn't exist. Type !coins for Coin ID's in the library.")
+
 
     elif message.content.startswith(f"{pc}{commands[4]['command']}"):  # Remove Coin Command
         message_elements = message.content.split()
@@ -155,12 +163,44 @@ async def on_message(message):
                 await message.channel.send(commands[4]['help'])
         except IndexError:
             await message.channel.send("🥱 Sorry, no Coin ID as been specified. Type !coins for Coin ID's in the library.")
+            return
 
+        cgh = CoinGeckoHelpers()
+        coin_gecko_id, coin_gecko_name = cgh.get_coin_by_symbol(symbol)
         if coin_gecko_id:
             ed_coin = session.query(Coin).filter(symbol==symbol).first()
             session.delete(ed_coin)
             session.commit()
+        else:
+            await message.channel.send("🥱 Sorry, the specified Coin ID doesn't exist. Type !coins for Coin ID's in the library.")
 
         await message.channel.send("✅ Coin removed from the library.")
+    
+    elif message.content.startswith(f"{pc}{commands[5]['command']}"):  # Check value in Satoshi
+        message_elements = message.content.split()
+
+        try:
+            quantity_in_quote = message_elements[1]
+
+            if quantity_in_quote == "help":
+                await message.channel.send(commands[5]['help'])
+        except IndexError:
+            await message.channel.send("🥱 Sorry, no quantity as been specified.")
+            return
+
+        try:
+            quote_symbol = message_elements[2]
+        except IndexError:
+            quote_symbol = config.CURRENCY
+
+        coin_gecko_id = "bitcoin"
+
+        cg = CoinGeckoAPI()
+        price_in_quote_result = cg.get_price(ids=coin_gecko_id, vs_currencies=quote_symbol)
+        price_in_quote = price_in_quote_result[coin_gecko_id][quote_symbol]
+
+        satoshi = float(quantity_in_quote) / (price_in_quote / 100000000)
+
+        await message.channel.send(f"💱 {quantity_in_quote} {quote_symbol.upper()} = {int(round(satoshi, 0))} SAT")
 
 client.run(config.DISCORD_BOT_TOKEN)

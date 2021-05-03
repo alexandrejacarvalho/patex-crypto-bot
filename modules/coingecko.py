@@ -2,6 +2,7 @@ from pycoingecko import CoinGeckoAPI
 
 
 class CoinGeckoHelpers():
+    # https://github.com/man-c/pycoingecko
     def __init__(self):
         self.cg = CoinGeckoAPI()
 
